@@ -1,0 +1,219 @@
+{
+	"info": {
+		"_postman_id": "0d5fa08b-3364-4235-b547-0b49888ccdb1",
+		"name": "StudentAPI_Localhost_ChainingAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17518388"
+	},
+	"item": [
+		{
+			"name": "CreateStudent",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData=JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"id\",jsonData.id);\r",
+							"\r",
+							"pm.test(\"validate the Post Status code is 201 or not \", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var random=Math.random().toString(36).substring(2);\r",
+							"\r",
+							"var name=\"Sagar\"+random;\r",
+							"\r",
+							"pm.collectionVariables.set(\"env_name\",name);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n    {\r\n       \r\n        \"name\": \"{{env_name}}\",\r\n        \"location\": \"India\",\r\n        \"phone\": \"98989898989\",\r\n        \"courses\": [\r\n            \"java\",\r\n            \"selenium\"\r\n        ]\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{col_url}}/students",
+					"host": [
+						"{{col_url}}"
+					],
+					"path": [
+						"students"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetSingleStudent",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData=pm.response.json();\r",
+							"pm.test(\"Validate the response data with creted Data\",()=>\r",
+							"{\r",
+							"   pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"id\"));\r",
+							"   pm.expect(jsonData.name).to.eql(pm.collectionVariables.get(\"env_name\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"validate Get method status code is 200 or not\",()=>{\r",
+							"\r",
+							"pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{col_url}}/students/{{id}}",
+					"host": [
+						"{{col_url}}"
+					],
+					"path": [
+						"students",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateStudent",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validate the PUT method Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n       \"id\":\"4\",\r\n        \"name\": \"Sagar kumbhar\",\r\n        \"location\": \"India\",\r\n        \"phone\": \"98989898989\",\r\n        \"courses\": [\r\n            \"java\",\r\n            \"selenium\"\r\n        ]\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{col_url}}/students/{{id}}",
+					"host": [
+						"{{col_url}}"
+					],
+					"path": [
+						"students",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteStudent",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.unset(\"id\");\r",
+							"pm.collectionVariables.unset(\"env_name\");\r",
+							"\r",
+							"pm.test(\"validate the Delete method stats code is 200\",()=>{\r",
+							"\r",
+							"pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{col_url}}/students/{{id}}",
+					"host": [
+						"{{col_url}}"
+					],
+					"path": [
+						"students",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "col_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}
